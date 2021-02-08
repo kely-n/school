@@ -13,7 +13,7 @@ import java.util.List;
 
 public class ContactDAOImpl implements ContactDAO{
 
-    private JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
 
     public ContactDAOImpl(DataSource dataSource) {
         this.jdbcTemplate = new JdbcTemplate(dataSource);

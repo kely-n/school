@@ -7,6 +7,9 @@ public class Contact {
     private String address;
     private String phone;
 
+    public Contact(){
+
+    }
     public Contact(String name, String email, String address, String phone) {
         this.name = name;
         this.email = email;
@@ -22,7 +25,7 @@ public class Contact {
         this.phone = phone;
     }
 
-    public int getContactId() {
+    public Integer getContactId() {
         return contactId;
     }
 

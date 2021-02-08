@@ -10,7 +10,8 @@ import org.springframework.web.WebApplicationInitializer;
 public class SchoolApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(new Class[] {SchoolApplication.class , WebApplicationInitializer.class}, args);
+        SpringApplication.run(SchoolApplication.class, args);
+//        SpringApplication.run(new Class[] {SchoolApplication.class , WebApplicationInitializer.class}, args);
     }
 
 }
