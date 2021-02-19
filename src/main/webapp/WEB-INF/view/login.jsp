@@ -5,23 +5,25 @@
     <title>School contact manager</title>
     <style>
         body{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #0a484a;
 
-            background-color: darkgreen;
-            height: 100%;
         }
         .inputGroup{
             background-color: cornsilk;
-            border: 1px solid crimson;
+            border: 1px solid steelblue;
             padding: 10px;
             color: black;
-            margin: 10px;
+            margin: 20px;
             font-size: 1.2em;
             display: block;
         }
         button{
-            background-color: crimson;
+            background-color: #12a3a8;
             height: 50px;
-            width: 100px;
+            width: 150px;
             font-size: 1.2em;
             display: block;
         }
@@ -36,15 +38,16 @@
     </style>
 </head>
 <body>
-<div align="center" style="display: inline-block">
-    <div>
-        <form action="/">
+<div align="center" style=" margin-top: 10%" >
+
+        <form action="login" method="POST">
             <label>please login</label>
-            <input class="inputGroup" placeholder="username" type="text" name="username">
-            <input class="inputGroup" placeholder="password" type="password" name="password">
-            <button type="submit">Login</button>
+            <input class="inputGroup" placeholder="username" type="text" name="username" value="" required>
+            <input class="inputGroup" placeholder="password" type="password" name="password" value="" required>
+            <button type="submit" name="submit" value="submit">Login</button>
         </form>
-    </div>
+            <div style="background-color: crimson">${SPRING_SECURITY_LAST_EXCEPTION.message}</div>
+
 </div>
 </body>
 </html>

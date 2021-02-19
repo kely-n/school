@@ -3,6 +3,31 @@
 <html>
 <head>
     <title>create new contact</title>
+    <style>
+        body{
+
+            background-color: #0a484a;
+            color: white;
+
+        }
+
+        button{
+            background-color: #12a3a8;
+            height: 50px;
+            width: 150px;
+            font-size: 1.2em;
+            display: block;
+            margin-top: 50px;
+        }
+        a{
+            text-decoration: unset;
+            color: #74c9cc;
+            padding: 10px;
+        }
+        a:hover{
+            color: #9ae9ec;
+        }
+    </style>
 </head>
 <body>
 <div align="center">
@@ -29,13 +54,15 @@
            </tr>
 
            <tr>
-               <td colspan="2" align="center"><input type="submit" value = "save" /> </td>
+               <td colspan="2" align="center"><button type="submit" value = "save">save</button> </td>
            </tr>
        </table>
     </form:form>
-    <div><a href="/logout">Logout</a></div>
+
 
 </div>
-
+<div>
+    <a href="/">back</a>
+</div>
 </body>
 </html>

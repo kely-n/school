@@ -3,6 +3,29 @@
 <html>
 <head>
     <title>School contact manager</title>
+    <style>
+        body{
+
+            background-color: #0a484a;
+            color: white;
+        }
+        a{
+            text-decoration: unset;
+            color: #74c9cc;
+        }
+        a:hover{
+            color: #9ae9ec;
+        }
+        table{
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 12px;
+        }
+        tr:hover{
+            background-color: #083a3c;
+        }
+    </style>
 </head>
 <body>
 <div align="center">
@@ -33,6 +56,6 @@
         </c:forEach>
     </table>
 </div>
-
+<div align="center" style="padding: 30px"><a href="/logout" >Logout</a></div>
 </body>
 </html>
