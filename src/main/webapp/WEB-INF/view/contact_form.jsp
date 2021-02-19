@@ -33,6 +33,7 @@
            </tr>
        </table>
     </form:form>
+    <div><a href="/logout">Logout</a></div>
 
 </div>
 

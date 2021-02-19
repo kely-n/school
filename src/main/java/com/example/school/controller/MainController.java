@@ -20,6 +20,16 @@ public class MainController {
     @Autowired
     private ContactDAO contactDAO;
 
+    @RequestMapping("/login")
+    public String loginPage(){
+       return "login";
+    }
+
+    @RequestMapping("/logout")
+    public String logoutPage(){
+        return "logout";
+    }
+
     @RequestMapping("/")
     public ModelAndView listContact(ModelAndView model){
         List<Contact> listContact = contactDAO.list();
