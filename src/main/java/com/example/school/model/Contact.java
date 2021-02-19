@@ -1,7 +1,7 @@
 package com.example.school.model;
 
 public class Contact {
-    private Integer contactId;
+    private Integer contactId = 0;
     private String name;
     private String email;
     private String address;

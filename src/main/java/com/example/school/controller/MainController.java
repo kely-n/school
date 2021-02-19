@@ -40,10 +40,11 @@ public class MainController {
 
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public ModelAndView saveContact(@ModelAttribute Contact contact){
-        if(contact.getContactId() == null) {
-            contactDAO.save(contact);
-        }else{
+        System.out.println(contact.toString());
+        if(contact.getContactId() != 0) {
             contactDAO.update(contact);
+        }else{
+            contactDAO.save(contact);
         }
        return new ModelAndView("redirect:/");
     }
