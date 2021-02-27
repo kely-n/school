@@ -49,24 +49,24 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
 
         protected void configure(HttpSecurity http) throws Exception {
             http
+                    //only allow requests starting with /api/
+                    .requestMatchers()
+                        .antMatchers("/api/**")
+                        .and()
                     //Adds CSRF support. When using websecurityconfigureradapter, enabled by default, disable it
                     .csrf().disable()
-                    //only allow requests starting with /api
-                    .requestMatchers().antMatchers("/api/**")
-                    .and()
                     //Turn on access restrictions for requests using HttpServletRequest
                     .authorizeRequests()
-                    .antMatchers( "/api/**")
-                    .permitAll()
-                    .anyRequest()
-                    .authenticated()
-
-            //enable session policy as jwt follows stateless authentication mechanism
-            .and()
-            .exceptionHandling()
-            .and()
-            .sessionManagement()
-            .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+                        .antMatchers( "/api/authenticate")
+                        .permitAll()
+                        .anyRequest()
+                        .authenticated()
+                        //enable session policy as jwt follows stateless authentication mechanism
+                        .and()
+                    .exceptionHandling()
+                        .and()
+                    .sessionManagement()
+                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
             http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
         }
     }
