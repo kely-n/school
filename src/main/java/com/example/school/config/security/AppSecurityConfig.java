@@ -1,62 +1,105 @@
 package com.example.school.config.security;
 /* Dev Kelyn created the file on 2021-02-19 inside the package - com.example.school.config.security */
 
+import com.example.school.config.security.filter.JwtFilter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.BeanIds;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 /**
  *
  */
-@Configuration
 @EnableWebSecurity
 public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
 
 
     @Autowired
-    private UserDetailsService userDetailsService;
+    private MyUserDetailsService myUserDetailsService;
 
-    @Bean
+
+    @Configuration
+    @Order(1)
+    public class ApiWebSecurityConfigurationAdapter extends WebSecurityConfigurerAdapter {
+        @Override
+        protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+            auth.userDetailsService(myUserDetailsService);
+        }
+
+        @Bean
+        public PasswordEncoder passwordEncoder(){
+            return new BCryptPasswordEncoder();
+        }
+
+        //inject the filter class
+        @Autowired
+        private JwtFilter jwtFilter;
+
+        protected void configure(HttpSecurity http) throws Exception {
+            http
+                    .csrf().disable()
+                    .authorizeRequests()
+                    .antMatchers("/api/authenticate")
+                    .permitAll()
+                    .anyRequest()
+                    .authenticated()
+
+            //enable session policy as jwt follows stateless authentication mechanism
+            .and()
+            .exceptionHandling()
+            .and()
+            .sessionManagement()
+            .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
+            http.addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
+        }
+    }
+
+    @Configuration
+    @Order(2)
+    public class FormLoginSecurityConfigurerAdatpter extends WebSecurityConfigurerAdapter{
+        @Bean
     public DaoAuthenticationProvider authProvier(){
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-        provider.setUserDetailsService(userDetailsService);
+        provider.setUserDetailsService(myUserDetailsService);
         //make sure you bcrypt passwords, the line below undoes the bycrypt.
         provider.setPasswordEncoder(new BCryptPasswordEncoder());
         return provider;
     }
+        @Override
+        protected void configure(HttpSecurity http) throws Exception {
+            http
+                    .csrf().disable()
+                    .authorizeRequests().antMatchers("/login").permitAll()
+                    .anyRequest().authenticated()
+                    .and()
+                    .formLogin()
+                    .loginPage("/login").permitAll()
+                    .and()
+                    .logout().invalidateHttpSession(true)
+                    .clearAuthentication(true)
+                    .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                    .permitAll();
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http
-                .csrf().disable()
-                .authorizeRequests().antMatchers("/login").permitAll()
-                .anyRequest().authenticated()
-                .and()
-                .formLogin()
-                .loginPage("/login").permitAll()
-                .and()
-                .logout().invalidateHttpSession(true)
-                .clearAuthentication(true)
-                .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                .permitAll();
-
+        }
     }
-    //    @Bean
-//    @Override
-//    protected UserDetailsService userDetailsService() {
-//        //dont return this
-//        //return super.userDetailsService();
-//        List<UserDetails> users = new ArrayList<>();
-//        users.add(User.withDefaultPasswordEncoder().username("kely").password("1234").roles("USER").build());
-//
-//        return  new InMemoryUserDetailsManager(users);
-//    }
+
+    @Bean(name = BeanIds.AUTHENTICATION_MANAGER)
+    @Override
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
+    }
+
+
 }
