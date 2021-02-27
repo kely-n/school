@@ -49,9 +49,14 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
 
         protected void configure(HttpSecurity http) throws Exception {
             http
+                    //Adds CSRF support. When using websecurityconfigureradapter, enabled by default, disable it
                     .csrf().disable()
+                    //only allow requests starting with /api
+                    .requestMatchers().antMatchers("/api/**")
+                    .and()
+                    //Turn on access restrictions for requests using HttpServletRequest
                     .authorizeRequests()
-                    .antMatchers("/api/authenticate")
+                    .antMatchers( "/api/**")
                     .permitAll()
                     .anyRequest()
                     .authenticated()
@@ -79,6 +84,7 @@ public class AppSecurityConfig extends WebSecurityConfigurerAdapter {
     }
         @Override
         protected void configure(HttpSecurity http) throws Exception {
+
             http
                     .csrf().disable()
                     .authorizeRequests().antMatchers("/login").permitAll()
